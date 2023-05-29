@@ -1,73 +1,86 @@
-import React, { Component } from 'react';
-import NotesDetail from '../components/NoteDetail';
 import PropTypes from 'prop-types';
-import { archiveNote, deleteNote, getNote, unarchiveNote } from '../utils/local-data';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { Component } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import DetailPageAction from '../components/DetailPageAction';
+import DetailPageBody from '../components/DetailPageBody';
+import { getNote, deleteNote, unarchiveNote, archiveNote } from '../utils/network-data';
 import Page404 from './Page404';
 
-function DetailNotesPageWrapper() {
+function DetailPageWrapper() {
   const { id } = useParams();
   const navigate = useNavigate();
+
   return (
-    <DetailNotesPage
-      navigate={navigate}
+    <DetailPage
       id={id}
+      navigate={navigate}
     />
   );
 }
 
-class DetailNotesPage extends Component {
+class DetailPage extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      notes: getNote(props.id),
+      note: null,
+      initializing: true,
     };
 
-    this.onDeleteNotesHandler = this.onDeleteNotesHandler.bind(this);
-    this.onArchiveNotesHandler = this.onArchiveNotesHandler.bind(this);
-    this.onUnarchiveNotesHandler = this.onUnarchiveNotesHandler.bind(this);
+    this.isNoteArchivedHandler = this.isNoteArchivedHandler.bind(this);
+    this.onDeleteHandler = this.onDeleteHandler.bind(this);
   }
 
-  onDeleteNotesHandler(id) {
-    deleteNote(id);
-    this.props.navigate('/');
+  async componentDidMount() {
+    const { data } = await getNote(this.props.id);
+    this.setState(() => {
+      return {
+        note: data,
+        initializing: false,
+      };
+    });
   }
 
-  onArchiveNotesHandler(id) {
-    archiveNote(id);
-    this.props.navigate('/');
+  async isNoteArchivedHandler(id) {
+    if (this.state.note.archived) {
+      await unarchiveNote(id);
+      this.props.navigate('/');
+    } else if (!this.state.note.archived) {
+      await archiveNote(id);
+      this.props.navigate('/');
+    }
   }
 
-  onUnarchiveNotesHandler(id) {
-    unarchiveNote(id);
+  async onDeleteHandler(id) {
+    await deleteNote(id);
     this.props.navigate('/');
   }
 
   render() {
-    if (this.state.notes === '') {
-      return <p>Catatan tidak ditemukan</p>;
+    if (this.state.initializing) {
+      return null;
     }
 
-    if (this.state.notes === null) {
-      return <Page404 />;
+    if (this.state.note) {
+      return (
+        <section className="detail-page">
+          <DetailPageBody note={this.state.note} />
+          <DetailPageAction
+            id={this.props.id}
+            archived={this.state.note.archived}
+            isArchived={this.isNoteArchivedHandler}
+            onDelete={this.onDeleteHandler}
+          />
+        </section>
+      );
     }
-
-    return (
-      <>
-        <NotesDetail
-          onDelete={this.onDeleteNotesHandler}
-          onArchive={this.onArchiveNotesHandler}
-          onUnarchive={this.onUnarchiveNotesHandler}
-          {...this.state.notes}
-        />
-      </>
-    );
+    return <Page404 />;
   }
 }
 
-DetailNotesPage.propTypes = {
-  id: PropTypes.string.isRequired,
+DetailPage.propTypes = {
+  id: PropTypes.string,
   navigate: PropTypes.func.isRequired,
 };
-export default DetailNotesPageWrapper;
+
+export default DetailPageWrapper;

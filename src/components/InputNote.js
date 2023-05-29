@@ -1,60 +1,51 @@
-import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import React, { useContext, useState } from 'react';
 import { FiCheck } from 'react-icons/fi';
+import LocaleContext from '../contexts/LocaleContexts';
+import useInput from '../hooks/useInput';
 
-class NoteInput extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      title: '',
-      body: '',
-    };
+function NoteInput({ addNote }) {
+  const [title, onTitleChange] = useInput('');
+  const [body, setBody] = useState('');
+  const { locale } = useContext(LocaleContext);
 
-    this.onSubmitHandler = this.onSubmitHandler.bind(this);
+  function onInputHandler(event) {
+    setBody(event.target.innerHTML);
   }
 
-  onTitleChange(event) {
-    this.setState({ title: event.target.value });
-  }
-  onInputHandler(event) {
-    this.setState({ body: event.target.innerHTML });
+  function onSubmitHandler() {
+    addNote({ title, body });
   }
 
-  onSubmitHandler() {
-    this.props.addNote(this.state);
-  }
-
-  render() {
-    return (
-      <section className="add-new-page">
-        <div className="add-new-page__input">
-          <input
-            type="text"
-            className="add-new-page__input__title"
-            placeholder="masukan judul catatan..."
-            value={this.state.title}
-            onChange={(e) => this.onTitleChange(e)}
-          />
-          <div
-            className="add-new-page__input__body"
-            contentEditable
-            data-placeholder="ketikan catatan..."
-            onInput={(e) => this.onInputHandler(e)}
-          ></div>
-        </div>
-        <div className="add-new-page__action">
-          <button
-            className="action"
-            type="button"
-            title="Simpan"
-            onClick={this.onSubmitHandler}
-          >
-            <FiCheck />
-          </button>
-        </div>
-      </section>
-    );
-  }
+  return (
+    <section className="add-new-page">
+      <div className="add-new-page__input">
+        <input
+          type="text"
+          className="add-new-page__input__title"
+          placeholder={locale === 'id' ? 'Catatan rahasia' : 'Secret Notes'}
+          value={title}
+          onChange={onTitleChange}
+        />
+        <div
+          className="add-new-page__input__body"
+          contentEditable
+          data-placeholder={locale === 'id' ? 'Tuliskan catatan anda ....' : 'Write down your notes ....'}
+          onInput={(e) => onInputHandler(e)}
+        ></div>
+      </div>
+      <div className="add-new-page__action">
+        <button
+          className="action"
+          type="button"
+          title="Simpan"
+          onClick={onSubmitHandler}
+        >
+          <FiCheck />
+        </button>
+      </div>
+    </section>
+  );
 }
 
 NoteInput.propTypes = {

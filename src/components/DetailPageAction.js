@@ -1,46 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { MdOutlineArchive, MdOutlineUnarchive } from 'react-icons/md';
-import { BiTrashAlt } from 'react-icons/bi';
+import ButtonDelete from './ButtonDelete';
+import ButtonAction from './ButtonAction';
 
-export default function DetailPageAction({ id, archived, onDelete, onArchive, onUnarchive }) {
+function DetailPageAction({ id, archived, isArchived, onDelete }) {
   return (
     <div className="detail-page__action">
-      {archived ? (
-        <button
-          className="action"
-          type="button"
-          title="Pindahkan"
-          onClick={() => onUnarchive(id)}
-        >
-          <MdOutlineUnarchive />
-        </button>
-      ) : (
-        <button
-          className="action"
-          type="button"
-          title="Arsipkan"
-          onClick={() => onArchive(id)}
-        >
-          <MdOutlineArchive />
-        </button>
-      )}
-      <button
-        className="action"
-        type="button"
-        title="Hapus"
-        onClick={() => onDelete(id)}
-      >
-        <BiTrashAlt />
-      </button>
+      <ButtonAction
+        id={id}
+        archived={archived}
+        isArchived={isArchived}
+      />
+      <ButtonDelete
+        id={id}
+        onDelete={onDelete}
+      />
     </div>
   );
 }
 
 DetailPageAction.propTypes = {
-  id: PropTypes.string.isRequired,
   archived: PropTypes.bool.isRequired,
+  isArchived: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
-  onArchive: PropTypes.func.isRequired,
-  onUnarchive: PropTypes.func.isRequired,
+  id: PropTypes.string.isRequired,
 };
+
+export default DetailPageAction;

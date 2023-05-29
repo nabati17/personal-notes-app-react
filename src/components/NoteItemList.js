@@ -6,7 +6,7 @@ function NoteItemList({ notes }) {
   if (!notes.length) {
     return (
       <section className="notes-list-empty">
-        <p className="notes-list__empty">tidak ada catatan</p>
+        <p className="notes-list__empty">Gaada catatan</p>
       </section>
     );
   }

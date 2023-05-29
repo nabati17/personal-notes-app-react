@@ -1,59 +1,40 @@
-import React, { Component } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import HomePageAction from '../components/HomePageAction';
 import NoteItemList from '../components/NoteItemList';
 import SearchNote from '../components/SearchNote';
-import { getActiveNotes, searchNotes } from '../utils/local-data';
-import PropTypes from 'prop-types';
+import LocaleContext from '../contexts/LocaleContexts';
+import { searchNotes } from '../utils/local-data';
+import { getActiveNotes } from '../utils/network-data';
 
-function HomePageWrapper() {
+function HomePage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const title = searchParams.get('title');
 
-  function changeSearchParams(keyword) {
+  const [notes, setNotes] = useState([]);
+  const [keyword, setKeyword] = useState(title || '');
+  const { locale } = useContext(LocaleContext);
+
+  useEffect(() => {
+    getActiveNotes().then(({ data }) => {
+      setNotes(data);
+    });
+  }, []);
+
+  function onSearch(keyword) {
     setSearchParams({ title: keyword });
+    setKeyword(keyword);
   }
 
+  const filteredNotes = searchNotes(notes, keyword);
   return (
-    <HomePage
-      onSearch={changeSearchParams}
-      defaultKeyword={title || ''}
-    />
+    <section className="homepage">
+      <h2>{locale === 'id' ? 'Catatan Aktif' : 'Active Notes'}</h2>
+      <SearchNote onSearch={onSearch} />
+      <NoteItemList notes={filteredNotes} />
+      <HomePageAction />
+    </section>
   );
 }
 
-class HomePage extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      notes: getActiveNotes(),
-      keyword: props.defaultKeyword || '',
-    };
-
-    this.onSearch = this.onSearch.bind(this);
-  }
-
-  onSearch(keyword) {
-    this.setState({ keyword });
-    this.props.onSearch(keyword);
-  }
-
-  render() {
-    const notes = searchNotes(this.state.notes, this.state.keyword);
-    return (
-      <section className="homepage">
-        <h2>Catatan Aktif</h2>
-        <SearchNote onSearch={this.onSearch} />
-        <NoteItemList notes={notes} />
-        <HomePageAction />
-      </section>
-    );
-  }
-}
-
-HomePage.propTypes = {
-  onSearch: PropTypes.func.isRequired,
-  defaultKeyword: PropTypes.string.isRequired,
-};
-
-export default HomePageWrapper;
+export default HomePage;
