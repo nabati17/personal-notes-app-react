@@ -30,7 +30,7 @@ function LoginPage({ loginSuccess }) {
 
   return (
     <section className="login-page">
-      <h2>Ylogin dulu ges</h2>
+      <h2>login</h2>
       <LoginInput login={onLoginHandler} />
       <p>
         Belum punya akun? <Link to="/register">Daftar</Link>
