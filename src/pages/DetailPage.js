@@ -15,6 +15,7 @@ function DetailPageWrapper() {
       id={id}
       navigate={navigate}
     />
+    
   );
 }
 

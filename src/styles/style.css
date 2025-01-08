@@ -52,10 +52,20 @@ header h1 {
   flex: 1;
 }
 
+.link-no-decoration {
+  text-decoration: none; /* Menghilangkan garis bawah */
+  color: inherit; /* Warna teks sesuai dengan konteks */
+  transition: color 0.3s ease;
+
+}
+
+
+
+
 header .navigation ul li {
   display: inline-block;
-  font-size: 24px;
-  margin: 0 8px;
+  font-size: 22px;
+ 
 }
 
 main {
@@ -170,9 +180,20 @@ main {
   padding: 8px 0;
 }
 
+/* Placeholder styles */
 .add-new-page__input__title::placeholder {
   color: var(--on-background-grey);
 }
+
+/* Media query untuk layar kecil */
+@media (max-width: 768px) {
+  .add-new-page__input .add-new-page__input__title {
+    font-size: 32px;  /* Ukuran font lebih kecil */
+    padding: 6px 0;   /* Padding lebih kecil */
+  }
+}
+
+
 
 .add-new-page__input .add-new-page__input__body {
   width: 100%;
@@ -206,23 +227,29 @@ main {
 }
 
 .toggle-theme,
-.toggle-locale {
+.toggle-locale,
+.button-logout {
   background-color: transparent;
   border: 0;
   cursor: pointer;
   color: var(--on-background);
   display: flex;
   align-items: center;
-  margin: 0 16px;
+  margin: 8px; 
 }
 
 .toggle-theme {
   font-size: 36px;
 }
 
+.toggle-archive {
+  font-size:23px;
+}
+
 .toggle-locale {
   font-size: 28px;
 }
+
 
 .input-login,
 .input-register {
@@ -296,3 +323,145 @@ main {
     grid-template-columns: repeat(4, 1fr);
   }
 }
+
+
+/* Atur gaya dasar */
+
+
+/* Media Query untuk layar kecil (mobile) */
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.5rem; /* Sesuaikan ukuran font judul */
+  
+  }
+
+  .navigation ul {
+    flex-direction: column; /* Susun secara vertikal */
+    align-items: center;
+  }
+
+
+  
+}
+
+.add-new-page {
+  padding: 16px;
+}
+
+.add-new-page__input {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.add-new-page__input__title {
+  font-size: 16px;
+  padding: 8px;
+  border: 1px solid var(--primary);
+  border-radius: 8px;
+  width: 100%;
+}
+
+.add-new-page__input__body {
+  font-size: 14px;
+  padding: 8px;
+  border: 1px solid var(--primary);
+  border-radius: 8px;
+  width: 100%;
+  min-height: 150px;
+  overflow-y: auto;
+}
+
+.add-new-page__action {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.add-new-page__action .action {
+  font-size: 24px;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 12px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .add-new-page {
+    padding: 8px;
+  }
+
+  .add-new-page__input__title,
+  .add-new-page__input__body {
+    font-size: 14px;
+    padding: 6px;
+  }
+
+  .add-new-page__input__body {
+    min-height: 100px;
+  }
+
+  .add-new-page__action .action {
+    font-size: 20px;
+    padding: 10px;
+  }
+}
+
+header {
+  display: flex;
+  justify-content: space-between; /* Membuat elemen judul dan ikon berada di sisi yang berlawanan */
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid var(--on-background);
+}
+
+header h1 {
+  flex: 1; /* Membuat judul tetap di sisi kiri */
+}
+
+.navigation {
+  display: flex;
+
+}
+
+.navigation ul {
+  display: flex;
+  align-items: center;
+ 
+}
+
+.navigation ul li {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  list-style: none; /* Hilangkan bullet list */
+}
+
+.toggle-locale,
+.toggle-theme,
+.button-logout {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+  color: var(--on-background);
+  display: flex;
+  align-items: center;
+}
+
+/* Media Query untuk layar kecil */
+@media (max-width: 768px) {
+  header {
+    flex-direction: row; /* Tetap horizontal di layar kecil */
+    align-items: center;
+    justify-content: space-between; /* Judul di kiri, ikon di kanan */
+  }
+
+  .navigation ul {
+    flex-direction: row; /* Susunan ikon tetap horizontal */
+    justify-content: flex-end; /* Pastikan ikon tetap di kanan */
+  }
+} 

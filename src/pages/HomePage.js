@@ -29,7 +29,7 @@ function HomePage() {
   const filteredNotes = searchNotes(notes, keyword);
   return (
     <section className="homepage">
-      <h2>{locale === 'id' ? 'Catatan Aktif' : 'Active Notes'}</h2>
+      <h2>{locale === 'id' ? 'Cari Catatan ' : 'Search Notes'}</h2>
       <SearchNote onSearch={onSearch} />
       <NoteItemList notes={filteredNotes} />
       <HomePageAction />

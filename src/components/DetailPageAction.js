@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import ButtonDelete from './ButtonDelete';
 import ButtonAction from './ButtonAction';
 
-function DetailPageAction({ id, archived, isArchived, onDelete }) {
+
+function DetailPageAction({ id, archived, isArchived, onDelete, onEdit }) {
   return (
     <div className="detail-page__action">
       <ButtonAction
@@ -15,6 +16,7 @@ function DetailPageAction({ id, archived, isArchived, onDelete }) {
         id={id}
         onDelete={onDelete}
       />
+     
     </div>
   );
 }
@@ -23,6 +25,7 @@ DetailPageAction.propTypes = {
   archived: PropTypes.bool.isRequired,
   isArchived: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
+  onEdit: PropTypes.func.isRequired,
   id: PropTypes.string.isRequired,
 };
 
